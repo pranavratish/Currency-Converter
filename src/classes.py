@@ -111,3 +111,32 @@ class User:
     else:
       print('Error: Unauthorized User in User Area! The application will now terminate...')
 
+  def update_passw(self):
+
+    try:
+      with open('./data/users.json', 'r') as r :
+        try:
+          Valid = json.load(r)
+        except json.JSONDecodeError:
+          Valid = {}  
+    except FileNotFoundError:
+      Valid = {}
+ 
+    if self.user in Valid:
+      ConfirmPass = input('Please enter old password:\n')
+
+      if ConfirmPass != self.passw:
+        print('Incorrect password, returning to menu...')
+        
+      else:  
+        NewPass = input('Please enter a new password:\n')
+    
+        Valid[self.user] = NewPass
+
+        with open('./data/users.json', 'w') as w :
+          json.dump(Valid, w, indent=4)
+        print('password has been updated successfully')
+
+    else:
+      print('Error: Unauthorized User in User Area! The application will now terminate...')
+
