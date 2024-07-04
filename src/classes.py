@@ -1,5 +1,7 @@
+from currency_converter import CurrencyConverter
+from forex_python.bitcoin import BtcConverter
 import json
-import os
+import pandas as pd
 
 class User:
 
@@ -162,3 +164,35 @@ class User:
         print('Account deleted successfully, returning to login...')
       else:
         print('Invalid Password, returning to menu...')
+  
+class Log(User):
+  def __init__(self, user, passw):
+    super().__init__(user, passw)
+
+  def display_conv(self, limit=None):
+
+    try:
+        with open('./conversions.json', 'r') as r:
+            LoggedC = dict(json.load(r))
+    except FileNotFoundError:
+        print("Conversion log file not found.")
+        return
+    except json.JSONDecodeError:
+        print("Error reading the conversion log file.")
+        return
+
+    UsersLog = []
+    for key, value in LoggedC.items():
+        if self.user in value:
+            UsersLog.extend(dict(value[self.user]).values())
+
+    if not UsersLog:
+        print(f"No conversion logs found for user {self.user}.")
+        return
+
+    DisplayDF = pd.DataFrame(UsersLog)
+
+    if limit != None:
+      DisplayDF = DisplayDF.head(limit)
+
+    print(DisplayDF)
