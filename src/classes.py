@@ -140,3 +140,25 @@ class User:
     else:
       print('Error: Unauthorized User in User Area! The application will now terminate...')
 
+  def delete_user(self):
+
+    try:
+      with open('./data/users.json', 'r') as r :
+        try:
+          Valid = json.load(r)
+        except json.JSONDecodeError:
+          Valid = {}
+    except FileNotFoundError:
+      Valid = {}
+    
+    if self.user in Valid:
+      Confirm = input('Please re-enter your password to confirm deletion of account:\n')
+
+      if Confirm == self.passw:
+        print('Deleting Account...')
+        del Valid[self.user]        
+        with open('./data/users.json', 'w') as w :
+          json.dump(Valid, w)
+        print('Account deleted successfully, returning to login...')
+      else:
+        print('Invalid Password, returning to menu...')
