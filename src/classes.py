@@ -172,7 +172,7 @@ class Log(User):
   def display_conv(self, limit=None):
 
     try:
-        with open('./conversions.json', 'r') as r:
+        with open('./data/conversions.json', 'r') as r:
             LoggedC = dict(json.load(r))
     except FileNotFoundError:
         print("Conversion log file not found.")
@@ -199,7 +199,7 @@ class Log(User):
   
   def display_convB(self, limit=None):
     try:
-        with open('./conversionsB.json', 'r') as r:
+        with open('./data/conversionsB.json', 'r') as r:
             LoggedBC = dict(json.load(r))
     except FileNotFoundError:
         print("Bitcoin Conversion log file not found.")
@@ -223,3 +223,27 @@ class Log(User):
       DisplayBDF = DisplayBDF.head(limit)
 
     print(DisplayBDF)
+
+  def FAC_table(self):
+    try:
+        with open('./data/fastaccessconv.json', 'r') as r:
+            Fav = dict(json.load(r))
+    except FileNotFoundError:
+        print("Fast Access Conversions file not found.")
+        return
+    except json.JSONDecodeError:
+        print("Error reading the Fast Access Conversions file.")
+        return
+
+    SavedConv = []
+    for key, value in Fav.items():
+        if self.user in value:
+            SavedConv.extend(dict(value[self.user]).values())
+
+    if not Fav:
+        print(f"No saved conversions found for user {self.user}.")
+        return
+
+    DisplayF = pd.DataFrame(SavedConv)
+
+    print(DisplayF)
