@@ -83,4 +83,31 @@ class User:
 
       return f'User {self.user} successfully created. Please login to use Currency Converter.'
 
+  def update_user(self):
+
+    try:
+      with open('./data/users.json', 'r') as r :
+        try:
+          Valid = json.load(r)
+        except json.JSONDecodeError:
+          Valid = {}  
+    except FileNotFoundError:
+      Valid = {}
+
+    if self.user in Valid:
+      global NewUser
+      NewUser = input('Please enter a new user name:\n')
+
+      if NewUser in Valid:
+        return f'user name {NewUser} already exists. Please choose a different username.'
+      
+      Valid[NewUser] = Valid[self.user]
+
+      del Valid[self.user]
+
+      with open('./data/users.json', 'w') as w :
+        json.dump(Valid, w, indent=4)
+
+    else:
+      print('Error: Unauthorized User in User Area! The application will now terminate...')
 
