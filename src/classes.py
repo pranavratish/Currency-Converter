@@ -196,3 +196,30 @@ class Log(User):
       DisplayDF = DisplayDF.head(limit)
 
     print(DisplayDF)
+  
+  def display_convB(self, limit=None):
+    try:
+        with open('./conversionsB.json', 'r') as r:
+            LoggedBC = dict(json.load(r))
+    except FileNotFoundError:
+        print("Bitcoin Conversion log file not found.")
+        return
+    except json.JSONDecodeError:
+        print("Error reading the Bitcoin conversion log file.")
+        return
+
+    UsersLogB = []
+    for key, value in LoggedBC.items():
+        if self.user in value:
+            UsersLogB.extend(dict(value[self.user]).values())
+
+    if not UsersLogB:
+        print(f"No Bitcoin conversion logs found for user {self.user}.")
+        return
+
+    DisplayBDF = pd.DataFrame(UsersLogB)
+
+    if limit != None:
+      DisplayBDF = DisplayBDF.head(limit)
+
+    print(DisplayBDF)
