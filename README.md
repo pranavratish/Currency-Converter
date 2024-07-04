@@ -1,4 +1,4 @@
-# T1A3 Terminal Application
+# T1A3 Terminal Application - Currency Converter
 
 ### Source Control Repository
 
@@ -24,4 +24,9 @@ This application will be following the PEP 8 Style Guide for Python Code
 
 
 
+### Implementation Process
+
+#### Initial Plan
+
+<img src="./resources/TrelloScreenshot.png" alt="Initial Screenshot of Trello Board" height="200" width= "2500"/>
 
