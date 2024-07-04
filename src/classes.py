@@ -83,7 +83,4 @@ class User:
 
       return f'User {self.user} successfully created. Please login to use Currency Converter.'
 
-user1 = User('Michael', 'TestPass')
-
-print(user1.create_user())
 
