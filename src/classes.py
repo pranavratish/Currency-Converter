@@ -2,6 +2,8 @@ from currency_converter import CurrencyConverter
 from forex_python.bitcoin import BtcConverter
 import json
 import pandas as pd
+import requests as req
+from api import API_KEY
 
 class User:
 
@@ -280,3 +282,42 @@ class Conversion(User):
 
     # if this isnt working in the main file make sure you are printing the function
     return f'{self.amt} {self.from_c} = {ConvAmt:.2f} {self.to_c}'
+
+  def add_FAC(self):
+    # adding the conversion to fast access conversion json file
+
+    url = f'https://v6.exchangerate-api.com/v6/{API_KEY}/pair/{self.from_c}/{self.to_c}'
+
+    Conf = input('Are you sure you want to add this conversion rate to your Fast Access Conversions(type Y to proceed, type anything else to exit):\n')
+
+    AnswY = 'Yy'
+
+    if Conf in AnswY:
+      try:
+        with open('./data/fastaccessconv.json', 'r') as r:
+          Fav = dict(json.load(r))
+      except FileNotFoundError:
+        print("Conversion log file not found.")
+        return
+      except json.JSONDecodeError:
+        print("Error reading the conversion log file.")
+        return
+      Response = req.get(url)
+      Rate = Response.json()
+
+      Entry = {
+        "from_cur": self.from_c,
+        "to_cur": self.to_c,
+        "conv_rate": Rate["conversion_rate"]
+      }
+
+      for key, value in dict(Fav).items():
+        if self.user in value:
+          Fav[key][self.user][len(value[self.user]) + 1] = Entry
+      
+      with open('./data/fastaccessconv.json', 'w') as w :
+        json.dump(Fav, w, indent=4)
+      
+      return 'Conversion added to Fast Access Conversions.'
+    else:
+      return 'The conversion rate will not be saved.'
