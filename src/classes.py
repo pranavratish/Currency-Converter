@@ -247,3 +247,36 @@ class Log(User):
     DisplayF = pd.DataFrame(SavedConv)
 
     print(DisplayF)
+
+class Conversion(User):
+  
+  c = CurrencyConverter()
+
+  def __init__(self, from_c, to_c, amt, user, passw):
+    super().__init__(user, passw)
+    self.from_c = from_c
+    self.to_c = to_c
+    self.amt = amt
+
+  def convert(self):
+    ConvAmt = self.c.convert(self.amt, self.from_c, self.to_c)
+    # write conversion to json file after execution
+    with open('./data/conversions.json', 'r') as r :
+      Conv = json.load(r)
+    
+    Entry = {
+      "from_cur": self.from_c,
+      "to_cur": self.to_c,
+      "amount": self.amt,
+      "conversion": float(f'{ConvAmt:.2f}')
+    }
+
+    for key, value in dict(Conv).items():
+      if self.user in value:
+        Conv[key][self.user][len(value[self.user]) + 1] = Entry
+
+    with open('./data/conversions.json', 'w') as w :
+      json.dump(Conv, w, indent=4)
+
+    # if this isnt working in the main file make sure you are printing the function
+    return f'{self.amt} {self.from_c} = {ConvAmt:.2f} {self.to_c}'
