@@ -321,3 +321,31 @@ class Conversion(User):
       return 'Conversion added to Fast Access Conversions.'
     else:
       return 'The conversion rate will not be saved.'
+
+class BtcConversion(Conversion):
+
+  b = BtcConverter()
+
+  def __init__(self, from_c, amt, user, passw):
+    super().__init__(from_c, 'BTC', amt, user, passw)
+  
+  def b_convert(self):
+    ConvAmtB = self.b.convert_to_btc(self.amt, self.from_c)
+
+    with open('./data/conversionsB.json', 'r') as r :
+      ConvB = json.load(r)
+    
+    EntryB = {
+      "from_cur": self.from_c,
+      "amount": self.amt,
+      "BtcConversion": float(f'{ConvAmtB:.2f}')
+    }
+
+    for key, value in dict(ConvB).items():
+      if self.user in value:
+        ConvB[key][self.user][len(value[self.user]) + 1] = EntryB
+
+    with open('./data/conversionsB.json', 'w') as w :
+      json.dump(ConvB, w, indent=4)
+
+    return f'{self.amt} {self.from_c} = BTC {ConvAmtB:.2f}'
