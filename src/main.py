@@ -145,7 +145,7 @@ def start():
                                     QuickExit = True
                                 except TypeError:
                                     print('Error! Incorrect input.\nThe currencies must be written according to the ISO 4217 Currency Codes.')
-                                    QuickExit = True
+                                    HQuickExit = True
 
                                 while not ConvMenuExit:
 
@@ -156,14 +156,14 @@ def start():
 
                                         print(userFav)
 
-                                        QuickExit = True
+                                        ConvMenuExit = True
                                     
                                     elif ConvOps == 1:
 
                                         print('Returning to Home Menu...')
 
-                                        QuickExit = True
-                                QuickExit = False
+                                        ConvMenuExit = True
+                                ConvMenuExit = False
                             QuickExit = False
 
                         elif HomeOps == 1:
@@ -236,8 +236,28 @@ def start():
 
                                     print(CurrentUser.delete_user())
 
-                                    ProfileMenuExit == True
+                                    ProfileMenuExit = True
                                 
                                 elif ProfileOps == 6:
+                                    
+                                    ProfileMenuExit = True
+                            ProfileMenuExit = False
 
+                        elif HomeOps == 3:
 
+                            HomeMenuExit = True
+                        
+                    HomeMenuExit = False
+                else:
+                    print('The Password was incorrect, please enter correct login details.')
+            else:
+                print('That user does not exist, please create new user and return.')
+
+        elif MainOps == 1:
+                
+                NewUserN = input('Please create a Username:\n')
+                NewPass = input('Please create a Password for the account:\n')
+
+                NewUser = User(NewUserN, NewPass)
+
+                print(NewUser.create_user())
