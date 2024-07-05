@@ -255,9 +255,17 @@ def start():
 
         elif MainOps == 1:
                 
-                NewUserN = input('Please create a Username:\n')
-                NewPass = input('Please create a Password for the account:\n')
+            NewUserN = input('Please create a Username:\n')
+            NewPass = input('Please create a Password for the account:\n')
 
-                NewUser = User(NewUserN, NewPass)
+            NewUser = User(NewUserN, NewPass)
 
-                print(NewUser.create_user())
+            print(NewUser.create_user())
+
+            sleep(3)
+        
+        elif MainOps == 2:
+
+            MainMenuExit = True
+
+start()
