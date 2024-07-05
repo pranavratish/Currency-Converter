@@ -113,10 +113,10 @@ class User:
       with open('./data/users.json', 'w') as w :
         json.dump(Valid, w, indent=4)
 
-      print(f'Username has been updated to {NewUser}')
+      return f'Username has been updated to {NewUser}'
 
     else:
-      print('Error: Unauthorized User in User Area! The application will now terminate...')
+      return 'Error: Unauthorized User in User Area! The application will now terminate...'
 
   def update_passw(self):
 
@@ -166,9 +166,9 @@ class User:
         del Valid[self.user]        
         with open('./data/users.json', 'w') as w :
           json.dump(Valid, w)
-        print('Account deleted successfully, returning to login...')
+        return 'Account deleted successfully, returning to login...'
       else:
-        print('Invalid Password, returning to menu...')
+        return 'Invalid Password, returning to menu...'
   
 class Log(User):
   def __init__(self, user, passw):
@@ -246,7 +246,7 @@ class Log(User):
             SavedConv.extend(dict(value[self.user]).values())
 
     if not Fav:
-        print(f"No saved conversions found for user {self.user}.")
+        return f"No saved conversions found for user {self.user}."
         return
 
     DisplayF = pd.DataFrame(SavedConv)
