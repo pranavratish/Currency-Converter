@@ -29,5 +29,3 @@ This application will be following the PEP 8 Style Guide for Python Code
 #### Initial Plan
 
 <img src="./resources/TrelloScreenshot.png" alt="Initial Screenshot of Trello Board" height="200" width= "2500"/>
-
-#### Update
