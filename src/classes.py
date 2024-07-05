@@ -1,6 +1,8 @@
 from currency_converter import CurrencyConverter
 from forex_python.bitcoin import BtcConverter
 import json
+import sys
+from time import sleep
 import pandas as pd
 import requests as req
 from api import API_KEY
@@ -166,7 +168,9 @@ class User:
         del Valid[self.user]        
         with open('./data/users.json', 'w') as w :
           json.dump(Valid, w)
-        return 'Account deleted successfully, returning to login...'
+        print('Account deleted successfully, The application will close in 5 seconds...')
+        sleep(5)
+        sys.exit()
       else:
         return 'Invalid Password, returning to menu...'
   

@@ -81,7 +81,7 @@ def start():
         'Edit Username',
         'Edit Password',
         'Delete Account',
-        'Return to Profile'
+        'Return to Home'
     ]
     ProfileMenuCursor = '> '
     ProfileMenuCStyle = ('fg_cyan', 'bold')
@@ -231,5 +231,13 @@ def start():
                                     print(CurrentUser.update_passw())
 
                                     ProfileMenuExit = True
+
+                                elif ProfileOps == 5:
+
+                                    print(CurrentUser.delete_user())
+
+                                    ProfileMenuExit == True
                                 
+                                elif ProfileOps == 6:
+
 
