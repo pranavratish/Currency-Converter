@@ -210,5 +210,10 @@ def start():
 
                                     QuickExit = True
 
+                                elif ProfileOps == 2:
 
-                                
+                                    print(DisplayConv.FAC_table())
+
+                                    sleep(30)
+
+                                    QuickExit = True
