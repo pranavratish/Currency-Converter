@@ -13,32 +13,31 @@ class User:
     self.user = user
     self.passw = passw
   
+  def load_json(self, filepath):
+    try:
+      with open(filepath, 'r') as r:
+        try:
+          return json.load(r)
+        except json.JSONDecodeError:
+          return {}
+    except FileNotFoundError:
+      return {}
+  
+  def save_json(self, filepath, data):
+    with open(filepath, 'w') as w:
+      json.dump(data, w, indent=4)
+
   def create_user(self):
 
-    try:
-      with open('./data/users.json', 'r') as r :
-        try:
-          Valid = json.load(r)
-        except json.JSONDecodeError:
-          Valid = {}  
-    except FileNotFoundError:
-      Valid = {}
+    Valid = self.load_json('./data/users.json')
 
     if self.user in Valid:
       return f'User {self.user} already exists. Please login to use Currency Converter.'
     else:
       Valid[self.user] = self.passw
-      with open('./data/users.json', 'w') as w :
-        json.dump(Valid, w, indent=4)
+      self.save_json('./data/users.json', Valid)
 
-      try:
-        with open('./data/conversions.json', 'r') as r :
-          try:
-            UserStorage = json.load(r)
-          except json.JSONDecodeError:
-            UserStorage = {}
-      except FileNotFoundError:
-        UserStorage = {}
+      UserStorage = self.load_json('./data/conversions.json')
       
       Entry = {
         f'{self.user}' : {}
@@ -46,18 +45,11 @@ class User:
 
       UserStorage[len(UserStorage) + 1] = Entry
 
-      with open('./data/conversions.json', 'w') as w :
-        json.dump(UserStorage, w, indent=4)
+      self.save_json('./data/conversions.json', UserStorage)
       
-      try:
-        with open('./data/conversionsB.json', 'r') as r :
-          try:
-            UserStorageB = json.load(r)
-            CounterB = len(UserStorageB)
-          except json.JSONDecodeError:
-            UserStorageB = {}
-      except FileNotFoundError:
-        UserStorageB = {}
+      UserStorageB = self.load_json('./data/conversionsB.json')
+
+      CounterB = len(UserStorageB)
       
       EntryB = {
         f'{self.user}' : {}
@@ -65,18 +57,11 @@ class User:
 
       UserStorageB[CounterB + 1] = EntryB
 
-      with open('./data/conversionsB.json', 'w') as w :
-        json.dump(UserStorageB, w, indent=4)     
+      self.save_json('./data/conversionsB.json', UserStorageB)    
       
-      try:
-        with open('./data/fastaccessconv.json', 'r') as r :
-          try:
-            UserStorageF = json.load(r)
-            CounterF = len(UserStorageF)
-          except json.JSONDecodeError:
-            UserStorageF = {}
-      except FileNotFoundError:
-        UserStorageF = {}
+      UserStorageF = self.load_json('./data/fastaccessconv.json')
+
+      CounterF = len(UserStorageF)
       
       EntryF = {
         f'{self.user}' : {}
@@ -84,21 +69,13 @@ class User:
 
       UserStorageF[CounterF + 1] = EntryF
 
-      with open('./data/fastaccessconv.json', 'w') as w :
-        json.dump(UserStorageF, w, indent=4) 
+      self.save_json('./data/fastaccessconv.json', UserStorageF)
 
       return f'User {self.user} successfully created. Please login to use Currency Converter.'
 
   def update_user(self):
 
-    try:
-      with open('./data/users.json', 'r') as r :
-        try:
-          Valid = json.load(r)
-        except json.JSONDecodeError:
-          Valid = {}  
-    except FileNotFoundError:
-      Valid = {}
+    Valid = self.load_json('./data/users.json')
 
     if self.user in Valid:
       NewUser = input('Please enter a new user name:\n')
@@ -108,28 +85,18 @@ class User:
       
       Valid[NewUser] = Valid[self.user]
 
-      self.user = NewUser
+      Valid.pop(self.user)
 
-      del Valid[self.user]
+      self.save_json('./data/users.json', Valid)
 
-      with open('./data/users.json', 'w') as w :
-        json.dump(Valid, w, indent=4)
-
-      return f'Username has been updated to {NewUser}'
+      return 'Loading...'
 
     else:
       return 'Error: Unauthorized User in User Area! The application will now terminate...'
 
   def update_passw(self):
 
-    try:
-      with open('./data/users.json', 'r') as r :
-        try:
-          Valid = json.load(r)
-        except json.JSONDecodeError:
-          Valid = {}  
-    except FileNotFoundError:
-      Valid = {}
+    Valid = self.load_json('./data/users.json')
  
     if self.user in Valid:
       ConfirmPass = input('Please enter old password:\n')
@@ -142,32 +109,38 @@ class User:
     
         Valid[self.user] = NewPass
 
-        with open('./data/users.json', 'w') as w :
-          json.dump(Valid, w, indent=4)
+        self.save_json('./data/users.json', Valid)
+
         print('password has been updated successfully')
 
     else:
       print('Error: Unauthorized User in User Area! The application will now terminate...')
 
   def delete_user(self):
-
-    try:
-      with open('./data/users.json', 'r') as r :
-        try:
-          Valid = json.load(r)
-        except json.JSONDecodeError:
-          Valid = {}
-    except FileNotFoundError:
-      Valid = {}
+    Valid = self.load_json('./data/users.json')
+    ValidC = self.load_json('./data/conversions.json')
+    ValidB = self.load_json('./data/conversionsB.json')
+    ValidF = self.load_json('./data/fastaccessconv.json')
     
     if self.user in Valid:
       Confirm = input('Please re-enter your password to confirm deletion of account:\n')
 
       if Confirm == self.passw:
         print('Deleting Account...')
-        del Valid[self.user]        
-        with open('./data/users.json', 'w') as w :
-          json.dump(Valid, w)
+        for DataDict in (ValidC, ValidB, ValidF):
+           for key, value in list(DataDict.items()):
+              if self.user in value:
+                del DataDict[key]
+        
+        self.save_json('./data/conversions.json', ValidC)
+        
+        self.save_json('./data/conversionsB.json', ValidB)
+        
+        self.save_json('./data/fastaccessconv.json', ValidF)
+        
+        del Valid[self.user]
+        self.save_json('./data/users.json', Valid)
+
         print('Account deleted successfully, The application will close in 5 seconds...')
         sleep(5)
         sys.exit()

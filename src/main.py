@@ -68,7 +68,7 @@ def start():
         menu_entries = ConvMenuOptions,
         title = ConvMenuTitle,
         menu_cursor = ConvMenuCursor,
-        menu_cursor_style = ConvMenuCStyle,
+        menu_cursor_style = ConvMenuCStyle, 
         menu_highlight_style = ConvMenuTheme,
         clear_screen = True
     )
@@ -196,13 +196,23 @@ def start():
                                     
                                     DisplayConv = Log(UserN, Pass)
 
-                                    print(DisplayConv.display_conv())
+                                    print('Your log will be displayed for 30 seconds please wait')
+
+                                    sleep(3)
+
+                                    print(DisplayConv.display_conv(limit=5))
 
                                     sleep(30)
 
                                     ProfileMenuExit = True
                                 
                                 elif ProfileOps == 1:
+
+                                    DisplayConv = Log(UserN, Pass)
+
+                                    print('Your log will be displayed for 30 seconds please wait')
+
+                                    sleep(3)
 
                                     print(DisplayConv.display_convB())
 
@@ -211,6 +221,12 @@ def start():
                                     ProfileMenuExit = True
 
                                 elif ProfileOps == 2:
+
+                                    DisplayConv = Log(UserN, Pass)
+
+                                    print('Your log will be displayed for 30 seconds please wait')
+
+                                    sleep(3)
 
                                     print(DisplayConv.FAC_table())
 
@@ -224,15 +240,30 @@ def start():
 
                                     print(CurrentUser.update_user())
 
+                                    ConfirmUser = input('Please Confirm New Username:\n')
+
+                                    ConfirmUser = UserN
+
+                                    if ConfirmUser == UserN:
+                                        print('The Username was updated successfully')
+                                    else:
+                                        print('unsuccessful')
+
+                                    print(f'Username has been updated to {ConfirmUser}')
+
                                     ProfileMenuExit = True
                                 
                                 elif ProfileOps == 4:
+
+                                    CurrentUser = User(UserN, Pass)
 
                                     print(CurrentUser.update_passw())
 
                                     ProfileMenuExit = True
 
                                 elif ProfileOps == 5:
+
+                                    CurrentUser = User(UserN, Pass)
 
                                     print(CurrentUser.delete_user())
 

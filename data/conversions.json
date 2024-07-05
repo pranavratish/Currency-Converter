@@ -1,5 +1,12 @@
 {
     "1": {
-        "Michael": {}
+        "Michael": {
+            "1": {
+                "from_cur": "USD",
+                "to_cur": "CNY",
+                "amount": 2500.0,
+                "conversion": 18166.57
+            }
+        }
     }
 }
