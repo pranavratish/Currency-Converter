@@ -88,7 +88,7 @@ def start():
     ProfileMenuTheme = ('bg_black', 'fg_yellow')
     ProfileMenuExit = False
 
-    Profile_menu = TerminalMenu(
+    ProfileMenu = TerminalMenu(
         menu_entries = ProfileMenuOptions,
         title = ProfileMenuTitle,
         menu_cursor = ProfileMenuCursor,
@@ -169,7 +169,15 @@ def start():
                         elif HomeOps == 1:
                             while not QuickExit:
 
-                                UserBConv = bc(FromC, Amount, UserN, Pass)
+                                FromBC = input('What currency will you be converting from (Only use ISO 4217 Currency Codes):\n')
+
+                                try:
+                                    AmountB = float(input('How much will you convert:\n'))
+                                except TypeError:
+                                    print('Not an integer or decimal value.')
+                                    QuickExit = True
+
+                                UserBConv = bc(FromBC, AmountB, UserN, Pass)
 
                                 try:
                                     print(UserBConv.b_convert())
@@ -179,6 +187,23 @@ def start():
                                     QuickExit = True
                                 
                             QuickExit = False
+
+                        elif HomeOps == 2:
+                            while not ProfileMenuExit:
+                                ProfileOps = ProfileMenu.show()
+
+                                if ProfileOps == 0:
+                                    
+                                    DisplayConv = Log(UserN, Pass)
+
+                                    print(DisplayConv.display_conv())
+
+                                    sleep(30)
+
+                                    QuickExit = True
+                                
+                                elif ProfileOps == 1:
+                                    
 
 
                                 
