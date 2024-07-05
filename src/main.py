@@ -203,7 +203,12 @@ def start():
                                     QuickExit = True
                                 
                                 elif ProfileOps == 1:
-                                    
+
+                                    print(DisplayConv.display_convB())
+
+                                    sleep(30)
+
+                                    QuickExit = True
 
 
                                 
