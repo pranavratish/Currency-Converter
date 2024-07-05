@@ -4,6 +4,11 @@ from time import sleep
 import json
 from simple_term_menu import TerminalMenu
 from halo import Halo
+from classes import User
+from classes import Conversion as cn
+from classes import CurrencyConverter as cc
+from classes import BtcConversion as bc
+from classes import Log
 
 os.system('clear')
 
@@ -51,9 +56,8 @@ def start():
 
     ConvMenuTitle = ' Save to Fast Access Conversions?\n'
     ConvMenuOptions = [
-        'Edit',
-        'Delete',
-        'Exit to Profile'
+        'Save',
+        'Exit to Home'
     ]
     ConvMenuCursor = '> '
     ConvMenuCStyle = ('fg_cyan', 'bold')
@@ -96,9 +100,9 @@ def start():
     QuickExit = False
 
     while not MainMenuExit:
-        main_sel = MainMenu.show()
+        MainOps = MainMenu.show()
 
-        if main_sel == 0:
+        if MainOps == 0:
             UserN = str(input('Please Enter Username:\n'))
             Pass = str(input('Please Enter Password:\n'))
 
@@ -118,3 +122,50 @@ def start():
                     spinner.start()
                     sleep(3)
                     spinner.stop()
+                    while not HomeMenuExit:
+                        HomeOps = HomeMenu.show()
+
+                        if HomeOps == 0:
+                            while not QuickExit:
+
+                                FromC = input('What currency will you be converting from (Only use ISO 4217 Currency Codes):\n')
+
+                                ToC = input('What currency will you convert to (Only user ISO 4217 Currency Codes):\n')
+
+                                try:
+                                    Amount = float(input('How much will you convert:\n'))
+                                except TypeError:
+                                    print('Not an integer or decimal value.')
+                                    QuickExit = True
+
+                                userConv = cn(FromC, ToC, Amount, UserN, Pass)
+
+                                try:
+                                    print(userConv.convert())
+                                    QuickExit = True
+                                except TypeError:
+                                    print('Error! Incorrect input.\nThe currencies must be written according to the ISO 4217 Currency Codes.')
+                                    QuickExit = True
+
+                                while not ConvMenuExit:
+
+                                    ConvOps = ConvMenu.show()
+
+                                    if ConvOps == 0:
+                                        userFav = userConv.add_FAC()
+
+                                        print(userFav)
+
+                                        QuickExit = True
+                                    
+                                    elif ConvOps == 1:
+
+                                        print('Returning to Home Menu...')
+
+                                        QuickExit = True
+                                QuickExit = False
+                            QuickExit = False
+
+
+
+                                
