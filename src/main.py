@@ -118,10 +118,10 @@ def start():
             if UserN in Valid:
                 if Pass in Valid[UserN]:
                     print(f'Welcome Back {UserN}')
-                    spinner = Halo(text='Loading...', spinner='arc')
-                    spinner.start()
+                    Spinner = Halo(text='Loading...', spinner='arc')
+                    Spinner.start()
                     sleep(3)
-                    spinner.stop()
+                    Spinner.stop()
                     while not HomeMenuExit:
                         HomeOps = HomeMenu.show()
 
@@ -138,10 +138,10 @@ def start():
                                     print('Not an integer or decimal value.')
                                     QuickExit = True
 
-                                userConv = cn(FromC, ToC, Amount, UserN, Pass)
+                                UserConv = cn(FromC, ToC, Amount, UserN, Pass)
 
                                 try:
-                                    print(userConv.convert())
+                                    print(UserConv.convert())
                                     QuickExit = True
                                 except TypeError:
                                     print('Error! Incorrect input.\nThe currencies must be written according to the ISO 4217 Currency Codes.')
@@ -152,7 +152,7 @@ def start():
                                     ConvOps = ConvMenu.show()
 
                                     if ConvOps == 0:
-                                        userFav = userConv.add_FAC()
+                                        userFav = UserConv.add_FAC()
 
                                         print(userFav)
 
@@ -166,6 +166,19 @@ def start():
                                 QuickExit = False
                             QuickExit = False
 
+                        elif HomeOps == 1:
+                            while not QuickExit:
+
+                                UserBConv = bc(FromC, Amount, UserN, Pass)
+
+                                try:
+                                    print(UserBConv.b_convert())
+                                    QuickExit = True
+                                except TypeError:
+                                    print('Error! Incorrect input.\nThe currencies must be written according to the ISO 4217 Currency Codes.')
+                                    QuickExit = True
+                                
+                            QuickExit = False
 
 
                                 
