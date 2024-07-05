@@ -226,4 +226,10 @@ def start():
 
                                     ProfileMenuExit = True
                                 
+                                elif ProfileOps == 4:
+
+                                    print(CurrentUser.update_passw())
+
+                                    ProfileMenuExit = True
+                                
 
