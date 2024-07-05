@@ -200,7 +200,7 @@ def start():
 
                                     sleep(30)
 
-                                    QuickExit = True
+                                    ProfileMenuExit = True
                                 
                                 elif ProfileOps == 1:
 
@@ -208,7 +208,7 @@ def start():
 
                                     sleep(30)
 
-                                    QuickExit = True
+                                    ProfileMenuExit = True
 
                                 elif ProfileOps == 2:
 
@@ -216,4 +216,14 @@ def start():
 
                                     sleep(30)
 
-                                    QuickExit = True
+                                    ProfileMenuExit = True
+                                
+                                elif ProfileOps == 3:
+
+                                    CurrentUser = User(UserN, Pass)
+
+                                    print(CurrentUser.update_user())
+
+                                    ProfileMenuExit = True
+                                
+

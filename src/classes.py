@@ -99,7 +99,6 @@ class User:
       Valid = {}
 
     if self.user in Valid:
-      global NewUser
       NewUser = input('Please enter a new user name:\n')
 
       if NewUser in Valid:
@@ -107,10 +106,14 @@ class User:
       
       Valid[NewUser] = Valid[self.user]
 
+      self.user = NewUser
+
       del Valid[self.user]
 
       with open('./data/users.json', 'w') as w :
         json.dump(Valid, w, indent=4)
+
+      print(f'Username has been updated to {NewUser}')
 
     else:
       print('Error: Unauthorized User in User Area! The application will now terminate...')
