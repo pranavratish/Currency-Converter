@@ -3,73 +3,74 @@ import sys
 from time import sleep
 import json
 from simple_term_menu import TerminalMenu
+from halo import Halo
 
 os.system('clear')
 
 def start():
-    main_menu_title = ' Currency Converter\n'
-    main_menu_options = [
+    MainMenuTitle = ' Currency Converter\n'
+    MainMenuOptions = [
         'Login',
         'New User',
         'Exit'
     ]
-    main_menu_cursor = '> '
-    main_menu_c_style = ('fg_cyan', 'bold')
-    main_menu_theme = ('bg_black', 'fg_yellow')
-    main_menu_exit = False
+    MainMenuCursor = '> '
+    MainMenuCStyle = ('fg_cyan', 'bold')
+    MainMenuTheme = ('bg_black', 'fg_yellow')
+    MainMenuExit = False
 
-    main_menu = TerminalMenu(
-        menu_entries = main_menu_options,
-        title = main_menu_title,
-        menu_cursor = main_menu_cursor,
-        menu_cursor_style = main_menu_c_style,
-        menu_highlight_style = main_menu_theme,
+    MainMenu = TerminalMenu(
+        menu_entries = MainMenuOptions,
+        title = MainMenuTitle,
+        menu_cursor = MainMenuCursor,
+        menu_cursor_style = MainMenuCStyle,
+        menu_highlight_style = MainMenuTheme,
         clear_screen = True
     )
 
-    home_menu_title = ' Home\n'
-    home_menu_options = [
+    HomeMenuTitle = ' Home\n'
+    HomeMenuOptions = [
         'Currency Conversion',
         'Bitcoin Conversion',
         'View Profile',
         'Exit to Main Menu'
     ]
-    home_menu_cursor = '> '
-    home_menu_c_style = ('fg_cyan', 'bold')
-    home_menu_theme = ('bg_black', 'fg_yellow')
-    home_menu_exit = False
+    HomeMenuCursor = '> '
+    HomeMenuCStyle = ('fg_cyan', 'bold')
+    HomeMenuTheme = ('bg_black', 'fg_yellow')
+    HomeMenuExit = False
 
-    home_menu = TerminalMenu(
-        menu_entries = home_menu_options,
-        title = home_menu_title,
-        menu_cursor = home_menu_cursor,
-        menu_cursor_style = home_menu_c_style,
-        menu_highlight_style = home_menu_theme,
+    HomeMenu = TerminalMenu(
+        menu_entries = HomeMenuOptions,
+        title = HomeMenuTitle,
+        menu_cursor = HomeMenuCursor,
+        menu_cursor_style = HomeMenuCStyle,
+        menu_highlight_style = HomeMenuTheme,
         clear_screen = True
     )
 
-    conv_menu_title = ' Save to Fast Access Conversions?\n'
-    conv_menu_options = [
+    ConvMenuTitle = ' Save to Fast Access Conversions?\n'
+    ConvMenuOptions = [
         'Edit',
         'Delete',
         'Exit to Profile'
     ]
-    conv_menu_cursor = '> '
-    conv_menu_c_style = ('fg_cyan', 'bold')
-    conv_menu_theme = ('bg_black', 'fg_yellow')
-    conv_menu_exit = False
+    ConvMenuCursor = '> '
+    ConvMenuCStyle = ('fg_cyan', 'bold')
+    ConvMenuTheme = ('bg_black', 'fg_yellow')
+    ConvMenuExit = False
 
-    conv_menu = TerminalMenu(
-        menu_entries = conv_menu_options,
-        title = conv_menu_title,
-        menu_cursor = conv_menu_cursor,
-        menu_cursor_style = conv_menu_c_style,
-        menu_highlight_style = conv_menu_theme,
+    ConvMenu = TerminalMenu(
+        menu_entries = ConvMenuOptions,
+        title = ConvMenuTitle,
+        menu_cursor = ConvMenuCursor,
+        menu_cursor_style = ConvMenuCStyle,
+        menu_highlight_style = ConvMenuTheme,
         clear_screen = True
     )
 
-    Profile_menu_title = ' Profile\n'
-    Profile_menu_options = [
+    ProfileMenuTitle = ' Profile\n'
+    ProfileMenuOptions = [
         'View Conversion Log',
         'View Bitcoin Conversion Log',
         'View Fast Access Conversions',
@@ -78,17 +79,42 @@ def start():
         'Delete Account',
         'Return to Profile'
     ]
-    Profile_menu_cursor = '> '
-    Profile_menu_c_style = ('fg_cyan', 'bold')
-    Profile_menu_theme = ('bg_black', 'fg_yellow')
-    Profile_menu_exit = False
+    ProfileMenuCursor = '> '
+    ProfileMenuCStyle = ('fg_cyan', 'bold')
+    ProfileMenuTheme = ('bg_black', 'fg_yellow')
+    ProfileMenuExit = False
 
-    eProfile_menu = TerminalMenu(
-        menu_entries = Profile_menu_options,
-        title = Profile_menu_title,
-        menu_cursor = Profile_menu_cursor,
-        menu_cursor_style = Profile_menu_c_style,
-        menu_highlight_style = Profile_menu_theme,
+    Profile_menu = TerminalMenu(
+        menu_entries = ProfileMenuOptions,
+        title = ProfileMenuTitle,
+        menu_cursor = ProfileMenuCursor,
+        menu_cursor_style = ProfileMenuCStyle,
+        menu_highlight_style = ProfileMenuTheme,
         clear_screen = True
     )
 
+    QuickExit = False
+
+    while not MainMenuExit:
+        main_sel = MainMenu.show()
+
+        if main_sel == 0:
+            UserN = str(input('Please Enter Username:\n'))
+            Pass = str(input('Please Enter Password:\n'))
+
+            try:
+                with open('./data/users.json', 'r') as r :
+                    try:
+                        Valid = json.load(r)
+                    except json.JSONDecodeError:
+                        Valid = {}
+            except FileNotFoundError:
+                Valid = {}            
+            
+            if UserN in Valid:
+                if Pass in Valid[UserN]:
+                    print(f'Welcome Back {UserN}')
+                    spinner = Halo(text='Loading...', spinner='arc')
+                    spinner.start()
+                    sleep(3)
+                    spinner.stop()
