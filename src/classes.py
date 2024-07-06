@@ -2,10 +2,14 @@ from currency_converter import CurrencyConverter
 from forex_python.bitcoin import BtcConverter
 import json
 import sys
+import logging
 from time import sleep
 import pandas as pd
 import requests as req
 from api import API_KEY
+
+# Set up logging module
+logging.basicConfig(level=logging.INFO)
 
 class User:
 
@@ -192,7 +196,7 @@ class Log(User):
     DisplayDF = pd.DataFrame(UsersLog)
 
     if limit != None:
-      DisplayDF = DisplayDF.head(limit)
+      DisplayDF = DisplayDF.tail(limit)
 
     print(DisplayDF)
   
@@ -212,7 +216,7 @@ class Log(User):
     DisplayBDF = pd.DataFrame(UsersLogB)
 
     if limit != None:
-      DisplayBDF = DisplayBDF.head(limit)
+      DisplayBDF = DisplayBDF.tail(limit)
 
     print(DisplayBDF)
 
@@ -243,25 +247,28 @@ class Conversion(User):
     self.amt = amt
 
   def convert(self):
-    ConvAmt = self.c.convert(self.amt, self.from_c, self.to_c)
-    # write conversion to json file after execution
-    Conv = self.load_json('./data/conversions.json')
-    
-    Entry = {
-      "from_cur": self.from_c,
-      "to_cur": self.to_c,
-      "amount": self.amt,
-      "conversion": float(f'{ConvAmt:.2f}')
-    }
+    try:
+      ConvAmt = self.c.convert(self.amt, self.from_c, self.to_c)
+      Conv = self.load_json('./data/conversions.json')
+      
+      Entry = {
+        "from_cur": self.from_c,
+        "to_cur": self.to_c,
+        "amount": self.amt,
+        "conversion": float(f'{ConvAmt:.2f}')
+      }
 
-    for key, value in dict(Conv).items():
-      if self.user in value:
-        Conv[key][self.user][len(value[self.user]) + 1] = Entry
+      for key, value in dict(Conv).items():
+        if self.user in value:
+          Conv[key][self.user][len(value[self.user]) + 1] = Entry
 
-    self.save_json('./data/conversions.json', Conv)
+      self.save_json('./data/conversions.json', Conv)
 
-    # if this isnt working in the main file make sure you are printing the function
-    return f'{self.amt} {self.from_c} = {ConvAmt:.2f} {self.to_c}'
+      Result = f'{self.amt} {self.from_c} = {ConvAmt:.2f} {self.to_c}'
+      print(Result)
+    except Exception as e:
+      Error = f'Error occurred during conversion: {e}'
+      print(Error)
 
   def add_FAC(self):
     # adding the conversion to fast access conversion json file
@@ -301,20 +308,36 @@ class BtcConversion(Conversion):
     super().__init__(from_c, 'BTC', amt, user, passw)
   
   def b_convert(self):
-    ConvAmtB = self.b.convert_to_btc(self.amt, self.from_c)
+    try:
+      print('Starting Conversion...')
+      logging.info('Starting Conversion...')
+      
+      ConvAmtB = self.b.convert_to_btc(self.amt, self.from_c)
+      
+      print(f'Converted Amount = {ConvAmtB}')
+      logging.info(f'Converted Amount = {ConvAmtB}')
 
-    ConvB = self.load_json('./data/conversionsB.json')
-    
-    EntryB = {
-      "from_cur": self.from_c,
-      "amount": self.amt,
-      "BtcConversion": float(f'{ConvAmtB:.2f}')
-    }
+      ConvB = self.load_json('./data/conversionsB.json')
+      
+      EntryB = {
+        "from_cur": self.from_c,
+        "amount": self.amt,
+        "BtcConversion": float(f'{ConvAmtB:.2f}')
+      }
 
-    for key, value in dict(ConvB).items():
-      if self.user in value:
-        ConvB[key][self.user][len(value[self.user]) + 1] = EntryB
+      for key, value in dict(ConvB).items():
+        if self.user in value:
+          ConvB[key][self.user][len(value[self.user]) + 1] = EntryB
 
-    self.save_json('./data/conversionsB.json', ConvB)
+      self.save_json('./data/conversionsB.json', ConvB)
 
-    return f'{self.amt} {self.from_c} = BTC {ConvAmtB:.2f}'
+      Result =  f'{self.amt} {self.from_c} = BTC {ConvAmtB:.2f}'
+
+      logging.info(f'Conversion Result: {Result}')
+
+      print(Result)
+      return Result
+    except Exception as e:
+      Error = f'Error occurred during conversion: {e}'
+      print(Error)
+      return Error

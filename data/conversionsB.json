@@ -5,11 +5,36 @@
                 "from_cur": "AUD",
                 "amount": 50000.0,
                 "BtcConversion": 0.62
+            },
+            "2": {
+                "from_cur": "USD",
+                "amount": 30000.0,
+                "BtcConversion": 0.53
+            },
+            "3": {
+                "from_cur": "USD",
+                "amount": 100000.0,
+                "BtcConversion": 1.77
+            },
+            "4": {
+                "from_cur": "INR",
+                "amount": 120000.0,
+                "BtcConversion": 0.03
+            },
+            "5": {
+                "from_cur": "CNY",
+                "amount": 357501.0,
+                "BtcConversion": 0.87
+            },
+            "6": {
+                "from_cur": "AUD",
+                "amount": 12.0,
+                "BtcConversion": 0.0
             }
         }
     },
     "2": {
-        "Test": {
+        "Test1": {
             "1": {
                 "from_cur": "AUD",
                 "amount": 25000.0,
@@ -24,6 +49,26 @@
                 "from_cur": "USD",
                 "amount": 50000.0,
                 "BtcConversion": 0.89
+            },
+            "4": {
+                "from_cur": "AUD",
+                "amount": 600000.0,
+                "BtcConversion": 7.19
+            },
+            "5": {
+                "from_cur": "USD",
+                "amount": 1500.0,
+                "BtcConversion": 0.03
+            },
+            "6": {
+                "from_cur": "AUD",
+                "amount": 60000.0,
+                "BtcConversion": 0.71
+            },
+            "7": {
+                "from_cur": "CNY",
+                "amount": 500000.0,
+                "BtcConversion": 1.21
             }
         }
     }

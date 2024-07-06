@@ -128,23 +128,24 @@ def start():
                         if HomeOps == 0:
                             while not QuickExit:
 
-                                FromC = input('What currency will you be converting from (Only use ISO 4217 Currency Codes):\n')
-
-                                ToC = input('What currency will you convert to (Only user ISO 4217 Currency Codes):\n')
-
                                 try:
+                                    FromC = input('What currency will you be converting from (Only use ISO 4217 Currency Codes):\n')
+
+                                    ToC = input('What currency will you convert to (Only use ISO 4217 Currency Codes):\n')
+
                                     Amount = float(input('How much will you convert:\n'))
-                                except TypeError:
-                                    print('Not an integer or decimal value.')
-                                    QuickExit = True
 
-                                UserConv = cn(FromC, ToC, Amount, UserN, Pass)
+                                    UserConv = cn(FromC, ToC, Amount, UserN, Pass)
 
-                                try:
                                     print(UserConv.convert())
                                 except ValueError:
-                                    print('Error! Incorrect input.\nThe currencies must be written according to the ISO 4217 Currency Codes.')
+                                    print('Error! Incorrect input. The currencies must be written according to the ISO 4217 Currency Codes and the amount must be a number.')
                                     QuickExit = True
+                                except Exception as e:
+                                    print(f'Unexpected error: {e}')
+                                    QuickExit = True
+
+                                sleep(4)
 
                                 while not ConvMenuExit:
 
@@ -163,27 +164,31 @@ def start():
 
                                         ConvMenuExit = True
                                 ConvMenuExit = False
+
+                                QuickExit = True
+
                             QuickExit = False
 
                         elif HomeOps == 1:
                             while not QuickExit:
 
-                                FromBC = input('What currency will you be converting from (Only use ISO 4217 Currency Codes):\n')
-
                                 try:
+                                    FromBC = input('What currency will you be converting from (Only use ISO 4217 Currency Codes):\n')
+
                                     AmountB = float(input('How much will you convert:\n'))
-                                except TypeError:
-                                    print('Not an integer or decimal value.')
-                                    QuickExit = True
 
-                                UserBConv = bc(FromBC, AmountB, UserN, Pass)
+                                    UserBConv = bc(FromBC, AmountB, UserN, Pass)
 
-                                try:
                                     print(UserBConv.b_convert())
-                                except TypeError:
-                                    print('Error! Incorrect input.\nThe currencies must be written according to the ISO 4217 Currency Codes.')
+                                except ValueError:
+                                    print('Error! Incorrect input. The currencies must be written according to the ISO 4217 Currency Codes and the amount must be a number.')
                                     QuickExit = True
-                                
+                                except Exception as e:
+                                    print(f'Unexpected error: {e}')
+                                    QuickExit = True
+
+                                    sleep(4)
+                                    
                                 QuickExit = True
                                 
                             QuickExit = False
@@ -193,72 +198,76 @@ def start():
                                 ProfileOps = ProfileMenu.show()
 
                                 if ProfileOps == 0:
-                                    
-                                    DisplayConv = Log(UserN, Pass)
 
-                                    print('Your log will be displayed for 30 seconds please wait')
+                                    try:
+                                        DisplayConv = Log(UserN, Pass)
 
-                                    sleep(3)
-
-                                    print(DisplayConv.display_conv(limit=5))
-
-                                    sleep(30)
+                                        print('Your log will be displayed for 30 seconds please wait')
+                                        sleep(3)
+                                        print(DisplayConv.display_conv(limit=5))
+                                        sleep(30)
+                                    except Exception as e:
+                                        print(f'Error occurred while displaying log: {e}')
 
                                     ProfileMenuExit = True
                                 
                                 elif ProfileOps == 1:
 
-                                    DisplayConvB = Log(UserN, Pass)
+                                    try:
+                                        DisplayConvB = Log(UserN, Pass)
 
-                                    print('Your log will be displayed for 30 seconds please wait')
-
-                                    sleep(3)
-
-                                    print(DisplayConvB.display_convB())
-
-                                    sleep(30)
+                                        print('Your log will be displayed for 30 seconds please wait')
+                                        sleep(3)
+                                        print(DisplayConvB.display_convB(limit=5))
+                                        sleep(30)
+                                    except Exception as e:
+                                        print(f'Error occurred while displaying log: {e}')
 
                                     ProfileMenuExit = True
 
                                 elif ProfileOps == 2:
 
-                                    DisplayConvF = Log(UserN, Pass)
+                                    try:
+                                        DisplayConvF = Log(UserN, Pass)
 
-                                    print('Your log will be displayed for 30 seconds please wait')
-
-                                    sleep(3)
-
-                                    print(DisplayConvF.FAC_table())
-
-                                    sleep(30)
+                                        print('Your log will be displayed for 30 seconds please wait')
+                                        sleep(3)
+                                        print(DisplayConvF.FAC_table())
+                                        sleep(30)
+                                    except Exception as e:
+                                        print(f'Error occurred while displaying log: {e}')
 
                                     ProfileMenuExit = True
                                 
                                 elif ProfileOps == 3:
 
-                                    Result = CurrentUser.update_user()
+                                    try:
+                                        Result = CurrentUser.update_user()
+                                        print(Result)
 
-                                    print(Result)
-
-                                    if 'Loading...' in Result:
-                                        NewUsername = CurrentUser.user
-                                        CurrentUser = User(NewUsername, Pass)
+                                        if 'successfully update' in Result:
+                                            NewUsername = CurrentUser.user
+                                            CurrentUser = User(NewUsername, Pass)
+                                    except Exception as e:
+                                        print(f'Error updating username: {e}')
 
                                     ProfileMenuExit = True
                                 
                                 elif ProfileOps == 4:
 
-                                    CurrentUser = User(UserN, Pass)
-
-                                    print(CurrentUser.update_passw())
+                                    try:
+                                        print(CurrentUser.update_passw())
+                                    except Exception as e:
+                                        print(f'Error updating password: {e}')
 
                                     ProfileMenuExit = True
 
                                 elif ProfileOps == 5:
 
-                                    CurrentUser = User(UserN, Pass)
-
-                                    print(CurrentUser.delete_user())
+                                    try:
+                                        print(CurrentUser.delete_user())
+                                    except Exception as e:
+                                        print(f'Error deleting user: {e}')
 
                                     ProfileMenuExit = True
                                 

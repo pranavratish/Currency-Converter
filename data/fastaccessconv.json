@@ -1,8 +1,30 @@
 {
     "1": {
-        "Michael": {}
+        "Michael": {
+            "1": {
+                "from_cur": "AUD",
+                "to_cur": "INR",
+                "conv_rate": 56.2966
+            }
+        }
     },
     "2": {
-        "Test": {}
+        "Test1": {
+            "1": {
+                "from_cur": "JPY",
+                "to_cur": "CNY",
+                "conv_rate": 0.04528
+            },
+            "2": {
+                "from_cur": "AUD",
+                "to_cur": "JPY",
+                "conv_rate": 108.4316
+            },
+            "3": {
+                "from_cur": "KRW",
+                "to_cur": "CNY",
+                "conv_rate": 0.005274
+            }
+        }
     }
 }
