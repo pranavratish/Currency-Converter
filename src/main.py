@@ -6,7 +6,6 @@ from simple_term_menu import TerminalMenu
 from halo import Halo
 from classes import User
 from classes import Conversion as cn
-from classes import CurrencyConverter as cc
 from classes import BtcConversion as bc
 from classes import Log
 
@@ -122,6 +121,7 @@ def start():
                     Spinner.start()
                     sleep(3)
                     Spinner.stop()
+                    CurrentUser = User(UserN, Pass)
                     while not HomeMenuExit:
                         HomeOps = HomeMenu.show()
 
@@ -142,10 +142,9 @@ def start():
 
                                 try:
                                     print(UserConv.convert())
-                                    QuickExit = True
-                                except TypeError:
+                                except ValueError:
                                     print('Error! Incorrect input.\nThe currencies must be written according to the ISO 4217 Currency Codes.')
-                                    HQuickExit = True
+                                    QuickExit = True
 
                                 while not ConvMenuExit:
 
@@ -181,10 +180,11 @@ def start():
 
                                 try:
                                     print(UserBConv.b_convert())
-                                    QuickExit = True
                                 except TypeError:
                                     print('Error! Incorrect input.\nThe currencies must be written according to the ISO 4217 Currency Codes.')
                                     QuickExit = True
+                                
+                                QuickExit = True
                                 
                             QuickExit = False
 
@@ -208,13 +208,13 @@ def start():
                                 
                                 elif ProfileOps == 1:
 
-                                    DisplayConv = Log(UserN, Pass)
+                                    DisplayConvB = Log(UserN, Pass)
 
                                     print('Your log will be displayed for 30 seconds please wait')
 
                                     sleep(3)
 
-                                    print(DisplayConv.display_convB())
+                                    print(DisplayConvB.display_convB())
 
                                     sleep(30)
 
@@ -222,13 +222,13 @@ def start():
 
                                 elif ProfileOps == 2:
 
-                                    DisplayConv = Log(UserN, Pass)
+                                    DisplayConvF = Log(UserN, Pass)
 
                                     print('Your log will be displayed for 30 seconds please wait')
 
                                     sleep(3)
 
-                                    print(DisplayConv.FAC_table())
+                                    print(DisplayConvF.FAC_table())
 
                                     sleep(30)
 
@@ -236,20 +236,13 @@ def start():
                                 
                                 elif ProfileOps == 3:
 
-                                    CurrentUser = User(UserN, Pass)
+                                    Result = CurrentUser.update_user()
 
-                                    print(CurrentUser.update_user())
+                                    print(Result)
 
-                                    ConfirmUser = input('Please Confirm New Username:\n')
-
-                                    ConfirmUser = UserN
-
-                                    if ConfirmUser == UserN:
-                                        print('The Username was updated successfully')
-                                    else:
-                                        print('unsuccessful')
-
-                                    print(f'Username has been updated to {ConfirmUser}')
+                                    if 'Loading...' in Result:
+                                        NewUsername = CurrentUser.user
+                                        CurrentUser = User(NewUsername, Pass)
 
                                     ProfileMenuExit = True
                                 
@@ -272,6 +265,7 @@ def start():
                                 elif ProfileOps == 6:
                                     
                                     ProfileMenuExit = True
+
                             ProfileMenuExit = False
 
                         elif HomeOps == 3:
@@ -281,8 +275,10 @@ def start():
                     HomeMenuExit = False
                 else:
                     print('The Password was incorrect, please enter correct login details.')
+                    HomeMenuExit = True
             else:
                 print('That user does not exist, please create new user and return.')
+                HomeMenuExit = True
 
         elif MainOps == 1:
                 

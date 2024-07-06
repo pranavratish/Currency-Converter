@@ -8,5 +8,15 @@
                 "conversion": 18166.57
             }
         }
+    },
+    "2": {
+        "Test": {
+            "1": {
+                "from_cur": "USD",
+                "to_cur": "AUD",
+                "amount": 350.0,
+                "conversion": 525.64
+            }
+        }
     }
 }

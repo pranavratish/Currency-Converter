@@ -83,16 +83,41 @@ class User:
       if NewUser in Valid:
         return f'user name {NewUser} already exists. Please choose a different username.'
       
-      Valid[NewUser] = Valid[self.user]
-
-      Valid.pop(self.user)
+      Valid[NewUser] = Valid.pop(self.user)
 
       self.save_json('./data/users.json', Valid)
 
-      return 'Loading...'
+      self.update_related(self.user, NewUser)
+
+      self.user = NewUser
+
+      return f'Username successfully update to {NewUser}'
 
     else:
       return 'Error: Unauthorized User in User Area! The application will now terminate...'
+  
+  def update_related(self, OldUser, NewName):
+
+    Conv = self.load_json('./data/conversions.json')
+    for key, entry in Conv.items():
+      if OldUser in entry:
+        entry[NewName] = entry[OldUser]
+        del entry[OldUser]
+    self.save_json('./data/conversions.json', Conv) 
+
+    ConvB = self.load_json('./data/conversionsB.json')
+    for key, entry in ConvB.items():
+      if OldUser in entry:
+        entry[NewName] = entry[OldUser]
+        del entry[OldUser]
+    self.save_json('./data/conversionsB.json', ConvB)
+
+    ConvF = self.load_json('./data/fastaccessconv.json')
+    for key, entry in ConvF.items():
+      if OldUser in entry:
+        entry[NewName] = entry[OldUser]
+        del entry[OldUser]
+    self.save_json('./data/fastaccessconv.json', ConvF)
 
   def update_passw(self):
 
@@ -153,15 +178,7 @@ class Log(User):
 
   def display_conv(self, limit=None):
 
-    try:
-        with open('./data/conversions.json', 'r') as r:
-            LoggedC = dict(json.load(r))
-    except FileNotFoundError:
-        print("Conversion log file not found.")
-        return
-    except json.JSONDecodeError:
-        print("Error reading the conversion log file.")
-        return
+    LoggedC = self.load_json('./data/conversions.json')
 
     UsersLog = []
     for key, value in LoggedC.items():
@@ -180,15 +197,8 @@ class Log(User):
     print(DisplayDF)
   
   def display_convB(self, limit=None):
-    try:
-        with open('./data/conversionsB.json', 'r') as r:
-            LoggedBC = dict(json.load(r))
-    except FileNotFoundError:
-        print("Bitcoin Conversion log file not found.")
-        return
-    except json.JSONDecodeError:
-        print("Error reading the Bitcoin conversion log file.")
-        return
+
+    LoggedBC = self.load_json('./data/conversionsB.json')
 
     UsersLogB = []
     for key, value in LoggedBC.items():
@@ -207,15 +217,8 @@ class Log(User):
     print(DisplayBDF)
 
   def FAC_table(self):
-    try:
-        with open('./data/fastaccessconv.json', 'r') as r:
-            Fav = dict(json.load(r))
-    except FileNotFoundError:
-        print("Fast Access Conversions file not found.")
-        return
-    except json.JSONDecodeError:
-        print("Error reading the Fast Access Conversions file.")
-        return
+
+    Fav = self.load_json('./data/fastaccessconv.json')
 
     SavedConv = []
     for key, value in Fav.items():
@@ -224,7 +227,6 @@ class Log(User):
 
     if not Fav:
         return f"No saved conversions found for user {self.user}."
-        return
 
     DisplayF = pd.DataFrame(SavedConv)
 
@@ -243,8 +245,7 @@ class Conversion(User):
   def convert(self):
     ConvAmt = self.c.convert(self.amt, self.from_c, self.to_c)
     # write conversion to json file after execution
-    with open('./data/conversions.json', 'r') as r :
-      Conv = json.load(r)
+    Conv = self.load_json('./data/conversions.json')
     
     Entry = {
       "from_cur": self.from_c,
@@ -257,8 +258,7 @@ class Conversion(User):
       if self.user in value:
         Conv[key][self.user][len(value[self.user]) + 1] = Entry
 
-    with open('./data/conversions.json', 'w') as w :
-      json.dump(Conv, w, indent=4)
+    self.save_json('./data/conversions.json', Conv)
 
     # if this isnt working in the main file make sure you are printing the function
     return f'{self.amt} {self.from_c} = {ConvAmt:.2f} {self.to_c}'
@@ -273,15 +273,7 @@ class Conversion(User):
     AnswY = 'Yy'
 
     if Conf in AnswY:
-      try:
-        with open('./data/fastaccessconv.json', 'r') as r:
-          Fav = dict(json.load(r))
-      except FileNotFoundError:
-        print("Conversion log file not found.")
-        return
-      except json.JSONDecodeError:
-        print("Error reading the conversion log file.")
-        return
+      Fav = self.load_json('./data/fastaccessconv.json')
       Response = req.get(url)
       Rate = Response.json()
 
@@ -295,8 +287,7 @@ class Conversion(User):
         if self.user in value:
           Fav[key][self.user][len(value[self.user]) + 1] = Entry
       
-      with open('./data/fastaccessconv.json', 'w') as w :
-        json.dump(Fav, w, indent=4)
+      self.save_json('./data/fastaccessconv.json', Fav)
       
       return 'Conversion added to Fast Access Conversions.'
     else:
@@ -312,8 +303,7 @@ class BtcConversion(Conversion):
   def b_convert(self):
     ConvAmtB = self.b.convert_to_btc(self.amt, self.from_c)
 
-    with open('./data/conversionsB.json', 'r') as r :
-      ConvB = json.load(r)
+    ConvB = self.load_json('./data/conversionsB.json')
     
     EntryB = {
       "from_cur": self.from_c,
@@ -325,7 +315,6 @@ class BtcConversion(Conversion):
       if self.user in value:
         ConvB[key][self.user][len(value[self.user]) + 1] = EntryB
 
-    with open('./data/conversionsB.json', 'w') as w :
-      json.dump(ConvB, w, indent=4)
+    self.save_json('./data/conversionsB.json', ConvB)
 
     return f'{self.amt} {self.from_c} = BTC {ConvAmtB:.2f}'
