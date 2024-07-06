@@ -20,10 +20,6 @@ This application will be following the PEP 8 Style Guide for Python Code
     - Fast Access Conversions (favourited conversion rates)
         - A list of conversions that have been bookmarked (favourited) by the user. Allows quick and easy access to commonly utilised conversion rates. 
 
-### Steps for Installation
-
-
-
 ### Implementation Process
 
 #### Initial Plan

@@ -1,0 +1,5 @@
+simple-term-menu
+currencyconverter
+forex-python
+pandas
+requests
