@@ -20,6 +20,8 @@ This application will be following the PEP 8 Style Guide for Python Code
     - Fast Access Conversions (favourited conversion rates)
         - A list of conversions that have been bookmarked (favourited) by the user. Allows quick and easy access to commonly utilised conversion rates. 
 
+PLEASE NOTE THE BITCOIN CONVERSION FUNCTION WORKS BUT DOES NOT DISPLAY THE CONVERTED AMOUNT UNLESS YOU LOOK AT THE LOG!
+
 ### Implementation Process
 
 #### Initial Plan
